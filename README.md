@@ -27,90 +27,56 @@ python src/results_printer.py
 
 
 ## Project Organization
-------------
+````
 ├───config
-│   ├───align
-│   │   ├───coco
-│   │   ├───coco_aug
-│   │   ├───f30k
-│   │   └───f30k_aug
-│   ├───altclip
-│   │   ├───coco
-│   │   ├───coco_aug
-│   │   ├───f30k
-│   │   └───f30k_aug
-│   ├───clip
-│   │   ├───coco
-│   │   ├───coco_aug
-│   │   ├───f30k
-│   │   └───f30k_aug
-│   └───groupvit
-│       ├───coco
-│       ├───coco_aug
-│       ├───f30k
-│       └───f30k_aug
 ├───results
-│   ├───coco
-│   │   ├───align
-│   │   │   ├───i2t
-│   │   │   └───t2i
-│   │   │       └───splits
-│   │   ├───altclip
-│   │   │   ├───i2t
-│   │   │   └───t2i
-│   │   ├───clip
-│   │   │   ├───i2t
-│   │   │   └───t2i
-│   │   └───groupvit
-│   │       ├───i2t
-│   │       └───t2i
-│   ├───coco_aug
-│   │   ├───align
-│   │   │   ├───i2t
-│   │   │   └───t2i
-│   │   ├───altclip
-│   │   │   ├───i2t
-│   │   │   └───t2i
-│   │   ├───clip
-│   │   │   ├───i2t
-│   │   │   └───t2i
-│   │   └───groupvit
-│   │       ├───i2t
-│   │       └───t2i
-│   ├───f30k
-│   │   ├───align
-│   │   │   └───t2i
-│   │   ├───altclip
-│   │   │   └───t2i
-│   │   ├───clip
-│   │   │   ├───i2t
-│   │   │   └───t2i
-│   │   └───groupvit
-│   │       └───t2i
-│   └───f30k_aug
-│       ├───align
-│       │   ├───i2t
-│       │   └───t2i
-│       ├───altclip
-│       │   ├───i2t
-│       │   └───t2i
-│       ├───clip
-│       │   ├───i2t
-│       │   └───t2i
-│       └───groupvit
-│           ├───i2t
-│           └───t2i
 └───src
+    │   environment.yaml
+    │   evaluation.py
+    │   results_printer.py
+    │   retriever.py
+    │   split_printer.py
+    │   __init__.py
+    │
     ├───data
-    │   └───augmented
-    ├───deprecated
+    │       dataset.py
+    │       __init__.py
+    │
     ├───evaluation
+    │       evaluator.py
+    │       __init__.py
+    │
     ├───metrics
+    │       dcg.py
+    │       recall_at_k.py
+    │
     ├───models
+    │   │   __init__.py
+    │   │
     │   ├───encoders
+    │   │       align.py
+    │   │       altclip.py
+    │   │       clip.py
+    │   │       groupvit.py
+    │   │
     │   └───relevance_estimators
+    │           clip_based.py
+    │
     ├───perturbations
+    │   │   perturbation.py
+    │   │
     │   └───perturbation_types
+    │           ARO.py
+    │           distraction_based.py
+    │           synonym_based.py
+    │           typos.py
+    │
     ├───retrieval
+    │       retriever.py
+    │       __init__.py
+    │
     └───utils
-```
+            dataset_preprocessing.py
+            image_processing.py
+            multimodal.py
+            utils.py
