@@ -1,6 +1,6 @@
 # Benchmark Granularity and Model Robustness for Image-Text Retrieval
 
-This repository contains the experiment logs for the SIGIR submission "Benchmark Granularity and Model Robustness for Image-Text Retrieval: A Reproducibility Study".
+This repository contains the code and experiment logs for the SIGIR submission **"Benchmark Granularity and Model Robustness for Image-Text Retrieval: A Reproducibility Study"**.
 
 
 ## Requirements
@@ -17,7 +17,40 @@ This command will create a conda environment `evalvl`. Activate the created envi
 source activate evalvl
 ```
 
-## Printing the results
+## Model evaluation
+
+To evaluate a model, run this command:
+
+```angular2html
+python src/evaluation.py \
+--dataset DATASET \
+--model MODEL \
+--task TASK \
+--compute_from_scratch \
+--perturbation PERTURBATION
+```
+
+### Explanation of Arguments:
+
+  - --dataset (str): Specifies the dataset to use. (e.g., coco, f30k, etc.)
+  - --model (str): Defines the model being evaluated. (e.g., align, clip)
+  - --task (str): Sets the evaluation task. (e.g., `t2i` for text-to-image retrieval, `i2t` for image-to-text)
+  - --compute_from_scratch (flag): If included, the evaluation will be performed from scratch instead of using cached results.
+  - --perturbation (str): Applies a specific perturbation technique to test model robustness.
+
+### Example Usage
+
+```angular2html
+python src/evaluation.py \
+--dataset coco \
+--model clip \
+--task t2i \
+--compute_from_scratch \
+--perturbation char_swap
+```
+
+
+## Printing the Results
 
 To print out the results, run the following command:
 
@@ -26,7 +59,7 @@ python src/results_printer.py
 ```
 
 
-## Project Organization
+## Project Structure
 ````
 ├───config
 ├───results

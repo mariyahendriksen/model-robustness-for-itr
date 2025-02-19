@@ -89,7 +89,7 @@ if __name__ == "__main__":
     parser.add_argument(
         "--root",
         type=str,
-        default="/Users/mhendriksen/Desktop/repositories/evaluating-cmr-in-mm/results"
+        default="./results"
     )
     parser.add_argument(
         "--dataset",
