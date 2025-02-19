@@ -1,4 +1,4 @@
-# Do Image-Text Retrieval Benchmarks Reflect the Performance of Vision-Language Models?
+# Benchmark Granularity and Model Robustness for Image-Text Retrieval
 
 This repository contains the experiment logs for the SIGIR submission "Benchmark Granularity and Model Robustness for Image-Text Retrieval: A Reproducibility Study".
 
