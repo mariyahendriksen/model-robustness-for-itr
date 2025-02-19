@@ -2,15 +2,13 @@ import torch
 import torch.nn as nn
 import numpy as np
 from typing import Union, List, Type
-from sentence_transformers import SentenceTransformer
 import munch
 from src.data.dataset import Dataset
 import os
 from typing import List, Type
 import PIL
 from PIL import Image
-from src.utils.dataset_preprocessing import get_img_filenames_full_path, get_img_filenames, divide_chunks, get_precomputed_embeddings_path, load_filenames_embs_from_pkl, get_emb_file_path, dump_filenames_embs_to_pkl
-import requests
+from src.utils.dataset_preprocessing import get_img_filenames_full_path, get_img_filenames, divide_chunks, get_precomputed_embeddings_path, load_filenames_embs_from_pkl, dump_filenames_embs_to_pkl
 import torch
 from PIL import Image
 import datetime

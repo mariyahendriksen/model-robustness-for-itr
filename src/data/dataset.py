@@ -1,9 +1,5 @@
-import torch
-import pickle
 import os
 from typing import List, Type
-import numpy as np
-from collections import Counter
 from torch.utils.data import Dataset
 from PIL import Image
 from tqdm import tqdm
@@ -33,7 +29,9 @@ class Dataset(Dataset):
 
 		self._load_annotations_from_json()
 
-		self.augmentations = load_json_annotations(config=self.config, augmented=True)
+		self.augmentations = load_json_annotations(
+			config=self.config, augmented=True
+		)
 
 		if 'aug' in self.config.dataset.name:
 			self.update_ds()
@@ -90,15 +88,12 @@ class Dataset(Dataset):
 		augmented_dataset = self.augmentations
 
 		for key in tqdm(self.images.keys()):
-			# print(f30k_dataset.images[key]['sentids'])
 			filename = self.images[key]['filename'].split('.')[0]
 			sentids = self.images[key]['sentids']
-			# print('filename: ', filename)
 			augmented_captions = augmented_dataset[filename]
-			# print('augmented_captions: ', augmented_captions)
 			for aug_caption, sentid in zip(augmented_captions, sentids):
 				self.update_caption(caption_idx=sentid, new_caption=aug_caption)
 		print('Finished augmenting the dataset')
 	
-def get_caption_idx(ds_split: Type[Dataset], capt_ids: List[int]):
+def get_caption_idx(ds_split: Type[Dataset], capt_ids: List[int]) -> List[str]:
     return [ds_split.captions[idx]['raw'] for idx in capt_ids]
