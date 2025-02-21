@@ -1,11 +1,10 @@
-import torch
-from munch import Munch
+"""Evaluation script for CLIP model on COCO and F30K datasets."""
 import argparse
+from munch import Munch
+
+from src.evaluation.evaluator import Evaluator
 from src.utils.dataset_preprocessing import save_results_dataframe
 from src.utils.utils import get_config, get_logger
-from src.evaluation.evaluator import Evaluator
-
-torch.set_num_threads(4)
 
 def main(args):
     print("Args: ", args)

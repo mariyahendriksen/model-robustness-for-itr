@@ -1,6 +1,8 @@
-import pickle
+"""This script processes and analyzes results from a specified dataset and model."""
 import argparse
 import os
+import pickle
+
 
 def get_results_root(args):
     """Construct the root path for the results based on the provided arguments.

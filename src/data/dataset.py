@@ -1,13 +1,15 @@
 import os
 from typing import List, Type
+
 from torch.utils.data import Dataset
 from PIL import Image
 from tqdm import tqdm
+
 from src.utils.dataset_preprocessing import load_json_annotations
 
 
 class Dataset(Dataset):
-
+	
 	def __init__(self, config, split, json_file):
 		"""
 		:param config:

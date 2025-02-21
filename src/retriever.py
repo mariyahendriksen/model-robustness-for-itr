@@ -1,56 +1,100 @@
-from typing import List
-import torch.nn as nn
-import os
-from sentence_transformers import util
-from IPython.display import display
-from IPython.display import Image as IPImage
+"""Evaluation script for CLIP model on COCO and F30K datasets."""
+import argparse
+from munch import Munch
 
-class Retriever(nn.Module):
+from src.evaluation.evaluator import Evaluator
+from src.utils.dataset_preprocessing import save_results_dataframe
+from src.utils.utils import get_config, get_logger
 
-    def __init__(self, config, model) -> None:
-        super(Retriever, self).__init__()
-        self.config = config
-        self.model = model
+def main(args):
+    print("Args: ", args)
+    config = get_config(dataset=args.dataset, model=args.model)
 
-    def retrieve_top_k(
-            self, query, documents, documents_names, k=3
-        ) -> tuple[List[str], List[float]]:
-        """Retrieve top k items from documents given a query.
+    config.args = Munch(
+        dataset=args.dataset,
+        model=args.model, 
+        task=args.task,
+        perturbation=args.perturbation,
+        compute_from_scratch=args.compute_from_scratch
+    )
+    
+    logging = get_logger(config=config)
+    config.logging = logging
 
-        Args:
-            query (str|image): query
-            documents (torch.Tensor): tensor of shape (n, m)
-                                        where n - num of documents,
-                                        m - emb size
-            documents_names (List[str]): list of size n,
-            where n - number of documents;
-            mapping between document embeddings and document names
-            k (int, optional): length of the ranked list. Defaults to 3.
+    evaluator = Evaluator(config=config)
 
-        Returns:
-            doc_names (List[str]): retrieved document names
-            doc_scores (List[float]): scores of the retrieved documents
-        """
-        doc_names = []
-        doc_scores = []
+    if args.task == 'i2t':
+        results = evaluator.i2t()
+    elif args.task == 't2i':
+        results = evaluator.t2i()
+    else:
+        print('Unknown task type, options: i2t, t2i')
+        return
 
-        # encode the query
-        query_emb = self.model.encode([query], convert_to_tensor=True, show_progress_bar=False)
+    print(results.describe())
+    print(results.head())
+    config.logging.info(results.describe())
+    config.logging.info(results.head())
 
-        # get top-k hits
-        hits = util.semantic_search(query_emb, documents, top_k=k)[0]
+    config.logging.info("Saving the results...")
+    print("Saving the results...")
+    save_results_dataframe(
+        config=config, dataf=results,
+        root=f'{args.dataset}/{args.model}/{args.task}',
+        filename=f"{args.perturbation}-results"
+    )
+    config.logging.info("Done!")
+    print("Done!")
 
-        print("Query:")
-        display(query)
-        for hit in hits:
-            doc_name, doc_score = documents_names[hit["corpus_id"]], round(hit["score"], 4)
-            print(f'Document: {doc_name}, score: {doc_score}')
-            display(IPImage(os.path.join(
-                self.model.config.dataset.root,
-                self.model.config.dataset.img_folder,
-                documents_names[hit['corpus_id']]), width=200
-            ))
-            doc_names.append(doc_name)
-            doc_scores.append(doc_score)
-
-        return doc_names, doc_scores
+if __name__ == "__main__":
+    parser = argparse.ArgumentParser()
+    parser.add_argument(
+        "--dataset",
+        type=str,
+        default="f30k",
+        choices=["coco", "f30k", "f30k_aug", "coco_aug"],
+        help="dataset: coco, f30k",
+    )
+    parser.add_argument(
+        "--model",
+        type=str,
+        default="clip",
+        choices=["clip", "align", "altclip", "groupvit"],
+        help="model name: clip, align, altclip, groupvit",
+    )
+    parser.add_argument(
+        "--task",
+        type=str,
+        choices=["t2i", "i2t"],
+        help="Task type: t2i, i2t",
+    )
+    parser.add_argument(
+        "--compute_from_scratch",
+        action='store_true',
+        help="Compute embeddings from scratch?",
+    )
+    parser.add_argument(
+        "--perturbation",
+        type=str,
+        default="none",
+        choices=[
+            "none",
+            'char_swap',
+            'missing_char',
+            'extra_char',
+            'nearby_char',
+            'probability_based_letter_change',
+            "synonym_noun",
+            'synonym_adj',
+            "distraction_true",
+            "distraction_false",
+            "shuffle_nouns_and_adj",
+            'shuffle_all_words',
+            'shuffle_allbut_nouns_and_adj',
+            'shuffle_within_trigrams',
+            'shuffle_trigrams'
+        ],
+        help="perturbation type: none, typos, etc.",
+    )
+    args = parser.parse_args()
+    main(args)
