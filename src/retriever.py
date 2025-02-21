@@ -12,13 +12,19 @@ class Retriever(nn.Module):
         self.config = config
         self.model = model
 
-    def retrieve_top_k(self, query, documents, documents_names, k=3) -> (List[str], List[float]):
-        """Retrieve top k items from documents given a query
+    def retrieve_top_k(
+            self, query, documents, documents_names, k=3
+        ) -> tuple[List[str], List[float]]:
+        """Retrieve top k items from documents given a query.
 
         Args:
             query (str|image): query
-            documents (torch.Tensor): tensor of shape (n, m) where n - number of documents, m - embedding size
-            documents_names (List[str]): list of size n, where n - number of documents; mapping between document embeddings and document names
+            documents (torch.Tensor): tensor of shape (n, m)
+                                        where n - num of documents,
+                                        m - emb size
+            documents_names (List[str]): list of size n,
+            where n - number of documents;
+            mapping between document embeddings and document names
             k (int, optional): length of the ranked list. Defaults to 3.
 
         Returns:

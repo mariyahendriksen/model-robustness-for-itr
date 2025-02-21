@@ -1,17 +1,8 @@
 import torch
-import os
-import sys
 from munch import Munch
-import pandas as pd
 import argparse
-from tqdm import tqdm
-from src.data.dataset import Dataset
-from src.utils.dataset_preprocessing import load_json_annotations, save_results_dataframe
-from src.retrieval.retriever import Retriever
-from src.metrics.recall_at_k import recall_at_k
-from src.models.relevance_estimators.clip_based import RelevanceEstimator
-from src.metrics.dcg import DCG
-from src.utils.utils import get_config, get_logger, get_model
+from src.utils.dataset_preprocessing import save_results_dataframe
+from src.utils.utils import get_config, get_logger
 from src.evaluation.evaluator import Evaluator
 
 torch.set_num_threads(4)

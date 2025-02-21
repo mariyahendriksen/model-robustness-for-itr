@@ -3,6 +3,14 @@ import argparse
 import os
 
 def get_results_root(args):
+    """Construct the root path for the results based on the provided arguments.
+    
+    Args:
+        args (argparse.Namespace): The command-line arguments.
+    
+    Returns:
+        str: The constructed root path for the results.
+    """
     return os.path.join(
         args.root,
         args.dataset,
@@ -11,14 +19,37 @@ def get_results_root(args):
     ) 
 
 def get_path(args, no_perturbations=False):
+    """Construct the file path for the results based on the provided arguments.
+    
+    Args:
+        args (argparse.Namespace): The command-line arguments.
+        no_perturbations (bool, optional): Flag to indicate if the path should
+                                           be for no perturbations.
+    
+    Returns:
+        str: The constructed file path for the results.
+    """
     filename = "none-results.pkl" if no_perturbations else f"{args.perturbation}-results.pkl"
     results_root = get_results_root(args)
     return os.path.join(results_root, filename)
 
 def get_rsum(dataf):
+    """Calculate the sum of recall scores at 1, 5, and 10.
+    
+    Args:
+        dataf (pd.DataFrame): The dataframe containing the results.
+    
+    Returns:
+        float: The sum of recall scores at 1, 5, and 10.
+    """
     return dataf['t2i_recalls_at_1'] + dataf['t2i_recalls_at_5'] + dataf['t2i_recalls_at_10']
 
 def main(args):
+    """Main function to process and print the results based on the specified conditions.
+    
+    Args:
+        args (argparse.Namespace): The command-line arguments.
+    """
     none_path = get_path(args, no_perturbations=True)
     with open(none_path, 'rb') as f:
         dataset_no_perturbation = pickle.load(f)
